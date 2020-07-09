@@ -1,8 +1,11 @@
 const express = require('express');
 const shortid =require('shortid');
+const CORS = require('cors');
+
 
 const server = express();
 
+server.use(CORS());
 server.use(express.json());
 
 let users = [];

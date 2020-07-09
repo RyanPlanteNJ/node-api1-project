@@ -26,7 +26,6 @@ function App() {
   <>
     <UserList users={users}/>
     <UserForm users={users} setUsers={setUsers} />
-    <Button variant="contained" color ="secondary" onClick={() => getUsers()}>This is a test</Button>
   </>
   );
 }

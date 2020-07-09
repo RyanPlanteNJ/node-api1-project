@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Button } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
+import SaveIcon from '@material-ui/icons/Save';
+import {TextField} from '@material-ui/core';
+
 
 class UserForm extends Component {
     state = {
@@ -19,9 +22,9 @@ class UserForm extends Component {
         const saveUser =
             axios
                 .post('http://localhost:5000/api/users', newUser)
-                .then(res=>{
+                .then(res => {
                     console.log(res);
-                    this.handleReload();
+                    this.handleReload()
                 })
                 .catch(err=>console.log(err));
     };
@@ -32,21 +35,29 @@ class UserForm extends Component {
     render(){
         return(
             <div>
-                <input
-                    type="text"
+                <TextField 
                     name="name"
+                    id="standard-multiline-flexible"
+                    label="Name Please"
+                    multiline
+                    rowsMax={4}
                     onChange={this.handleInput}
-                    placeholder="Name Please"
-                    value={this.state.name}
+                   value={this.state.name}
+                    variant ="outlined"
                 />
-                <input
-                    type="text"
+                  <TextField
                     name="bio"
+                    id="standard-multiline-flexible"
+                    label="Bio Please"
+                    multiline
+                    rows={4}
                     onChange={this.handleInput}
                     placeholder="Bio Please"
                     value={this.state.bio}
                 />
-                <Button color="primary" onClick={this.handleSubmit}>Save User</Button>
+                <IconButton aria-label="save"  >
+                    <SaveIcon onClick={this.handleSubmit}/>
+                </IconButton>
             </div>
         )
     }

@@ -7,7 +7,7 @@ function UserList ({users, id}){
         <div>
             {
             users.map(user => (
-                    <UserCard key={id} user={user}/>
+                   <UserCard key={user.id} user={user}/>
                 ))
             }
         </div>
