@@ -18,13 +18,14 @@ server.get('/api/users', (req,res) =>{
 });
 
 server.post('/api/users',(req,res) => {
+    const userInfo = req.body;
+
     try{
-        if (req.body.name == '' || req.body.bio == '') {
+        if (userInfo.name == '' || userInfo.bio == '') {
             res.status(400).json({
                 errorMessage: 'Please provide name and bio for the user'
             });
         } else {
-            userInfo = req.body;
             req.body.id = shortid.generate();
             users.push(userInfo)
             res.status(201).json(userInfo);
@@ -75,6 +76,34 @@ server.delete('/api/users/:id', (req, res) => {
         });
     }
 });
+
+server.put('/api/users/:id', (req, res) => {
+    const { id } = req.params;
+    const changes = req.body;
+
+    let index = users.findIndex(user => user.id === id);
+
+    try{
+        if (index !== -1 && changes.name !== '' && changes.id !== ''){
+            changes.id = id;
+            users[index] = changes;
+            res.status(200).json(users[index]);
+        } else if (changes.name == '' || changes.bio == '') {
+            res.status(400).json({
+                errorMessage: 'Please provide name and bio for the user'
+            });
+        } else {
+            res.status(404).json({
+                message: 'The user with the specified ID does not'
+            });
+        }
+    } catch {
+        res.status(500).json({
+            errorMessage: 'The user information could not be modified'
+        });
+    }
+});
+
 
 const PORT = 5000;
 
