@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 
 import {IconButton} from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import {makeStyles} from '@material-ui/core/styles';
 import {Card} from '@material-ui/core';
 import {CardContent} from '@material-ui/core';
@@ -28,22 +29,46 @@ const useStyles = makeStyles({
     }
 });
 
+const initialUser = {
+    name: '',
+    bio: '',
+}
+
 export default function UserCard(props) {
+
+    const [editing, setEditing] = useState(false);
+    const [userToEdit, setUserToEdit] = useState(initialUser);
+    const [renderToDo, setRenderToDo] = useState(null)
 
     const classes = useStyles();
     const { name, bio, id } = props.user;
     const users = props.user;
     
+    useEffect(()=>{
+        setRenderToDo(false)
+    },[]);
+
     const deleteUser = () => {
         axios
             .delete(`http://localhost:5000/api/users/${id}`)
             .then(res => {
-                console.log('delete res', res)
                 window.location.reload();
                })
             .catch(err =>
                 console.error("UserCard.js: deleteUser: err", err.message)
                 );
+    };
+
+    const editUser = () => {
+        axios
+            .put(`http://localhost:5000/api/users/${id}`, userToEdit)
+            .then((res) => {
+                setRenderToDo(!renderToDo);
+                setEditing(!editing);
+            })
+            .catch((err)=> {
+                console.error(err.message, err.response)
+            });
     };
 
     return (
@@ -53,8 +78,11 @@ export default function UserCard(props) {
                     className={classes.name} color="textSecondary" component="h2">{name}
                 </Typography>
                 <Typography className={classes.bio} variant="body2" component="p">{bio}</Typography>
-            <IconButton aria-label="delete">
-                <DeleteIcon onClick={()=>deleteUser()}/>
+            <IconButton aria-label="edit"onClick={()=>editUser()}>
+                <EditIcon />
+            </IconButton>
+            <IconButton aria-label="delete"onClick={()=>deleteUser()}>
+                <DeleteIcon />
             </IconButton>
             </CardContent>
         </Card>
