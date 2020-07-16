@@ -22,14 +22,14 @@ const useStyles = makeStyles((theme) => ({
 
 
 const initialForm = {
-    id: '',
+    name: '',
     bio: '',
 };
 
 export default function UserForm(){
 
     const classes = useStyles()
-    const [userForm, setUserForm] = useState(initialForm)    
+    const [userForm, setUserForm] = useState(initialForm);
 
 
     const handleInput = e => {

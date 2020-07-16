@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import axios from 'axios';
 
 import {IconButton} from '@material-ui/core';
@@ -29,25 +29,12 @@ const useStyles = makeStyles({
     }
 });
 
-const initialUser = {
-    name: '',
-    bio: '',
-}
-
 export default function UserCard(props) {
-
-    const [editing, setEditing] = useState(false);
-    const [userToEdit, setUserToEdit] = useState(initialUser);
-    const [renderToDo, setRenderToDo] = useState(null)
 
     const classes = useStyles();
     const { name, bio, id } = props.user;
     const users = props.user;
     
-    useEffect(()=>{
-        setRenderToDo(false)
-    },[]);
-
     const deleteUser = () => {
         axios
             .delete(`http://localhost:5000/api/users/${id}`)
@@ -59,18 +46,6 @@ export default function UserCard(props) {
                 );
     };
 
-    const editUser = () => {
-        axios
-            .put(`http://localhost:5000/api/users/${id}`, userToEdit)
-            .then((res) => {
-                setRenderToDo(!renderToDo);
-                setEditing(!editing);
-            })
-            .catch((err)=> {
-                console.error(err.message, err.response)
-            });
-    };
-
     return (
         <Card key={users.id} className={classes.root}>
             <CardContent>
@@ -78,7 +53,7 @@ export default function UserCard(props) {
                     className={classes.name} color="textSecondary" component="h2">{name}
                 </Typography>
                 <Typography className={classes.bio} variant="body2" component="p">{bio}</Typography>
-            <IconButton aria-label="edit"onClick={()=>editUser()}>
+            <IconButton aria-label="edit">
                 <EditIcon />
             </IconButton>
             <IconButton aria-label="delete"onClick={()=>deleteUser()}>
